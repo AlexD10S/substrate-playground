@@ -6,15 +6,21 @@ use subxt::config::substrate::{AssetTip, SubstrateExtrinsicParamsBuilder as Para
 #[subxt::subxt(runtime_metadata_path = "src/metadata/local_metadata.scale")]
 pub mod local {}
 
-pub type Call = local::runtime_types::kitchensink_runtime::RuntimeCall;
-type AssetsCall = local::runtime_types::pallet_assets::pallet::Call;
+// #[subxt::subxt(runtime_metadata_path = "src/metadata/westend_metadata.scale")]
+// pub mod westend {}
+
+// pub type Call = local::runtime_types::kitchensink_runtime::RuntimeCall;
+pub type Call = local::runtime_types::asset_hub_westend_runtime::RuntimeCall;
+type AssetsCall = local::runtime_types::pallet_asset_conversion::pallet::Call;
 type AssetConversionCall = local::runtime_types::pallet_asset_conversion::pallet::Call;
-type NativeOrAssetId = local::runtime_types::pallet_asset_conversion::types::NativeOrAssetId<u32>;
-type ChargeAssetTxPayment = local::runtime_types::pallet_asset_conversion_tx_payment::ChargeAssetTxPayment;
+// type NativeOrAssetId = local::runtime_types::pallet_asset_conversion::types::NativeOrAssetId<u32>;
+type MultiLocation = local::runtime_types::pallet_xcm::multilocation::MultiLocation;
+
 // Create an asset call
 pub fn create_asset_call(
     asset_id: u32,
-    admin: MultiAddress<AccountId32, u32>,
+    // admin: MultiAddress<AccountId32, u32>,
+    admin: MultiAddress<AccountId32, ()>,
     min_balance: u128,
 ) -> Result<Call, Box<dyn std::error::Error>> {
     let call = Call::Assets(AssetsCall::create {
@@ -46,7 +52,8 @@ pub fn set_asset_metadata_call(
 // Mint token
 pub fn mint_token_call(
     asset_id: u32,
-    beneficiary: MultiAddress<AccountId32, u32>,
+    // beneficiary: MultiAddress<AccountId32, u32>,
+    beneficiary: MultiAddress<AccountId32, ()>,
     amount: u128,
 ) -> Result<Call, Box<dyn std::error::Error>> {
     let call = Call::Assets(AssetsCall::mint {
@@ -115,7 +122,8 @@ pub async fn sign_and_send_batch_calls(
 //
 pub async fn sign_and_send_transfer(
     api: OnlineClient<SubstrateConfig>,
-    dest: MultiAddress<AccountId32, u32>,
+    // dest: MultiAddress<AccountId32, (u32)>,
+    dest: MultiAddress<AccountId32, ()>,
     amount: u128,
     asset_id: u32
 ) -> Result<(), subxt::Error> {
@@ -125,13 +133,12 @@ pub async fn sign_and_send_transfer(
     let tx_params = Params::new()
     .tip(AssetTip::new(0).of_asset(asset_id));
 
-    api.tx()
+    let hash = api.tx()
         .sign_and_submit_then_watch(&balance_transfer_tx, &alice_pair_signer, tx_params)
         .await?
-        .wait_for_in_block()
+        .wait_for_finalized_success()
         .await?
-        .wait_for_success()
-        .await?;
-
+        .has::<local::balances::events::Transfer>()?;
+    println!("Balance transfer extrinsic submitted with hash : {hash}");
     Ok(())
 }

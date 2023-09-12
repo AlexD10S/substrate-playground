@@ -3,6 +3,9 @@ use subxt::{OnlineClient, SubstrateConfig};
 #[subxt::subxt(runtime_metadata_path = "src/metadata/local_metadata.scale")]
 pub mod local {}
 
+// #[subxt::subxt(runtime_metadata_path = "src/metadata/westend_metadata.scale")]
+// pub mod westend {}
+
 //
 // Query the Existential Deposit
 //

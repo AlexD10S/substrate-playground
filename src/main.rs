@@ -1,13 +1,13 @@
 use subxt::{
     utils::{AccountId32, MultiAddress},
-    OnlineClient, PolkadotConfig, SubstrateConfig,
+    OnlineClient, SubstrateConfig,
 };
 use subxt_playground::calls::{
     create_asset_call, create_pool_with_native_call, mint_token_call,
     provide_liquidity_to_token_native_pool_call, set_asset_metadata_call,
     sign_and_send_batch_calls, sign_and_send_transfer, Call,
 };
-use subxt_playground::query::{query_assets, query_existential_deposit};
+use subxt_playground::query::query_existential_deposit;
 use subxt_signer::sr25519::dev::{self};
 
 pub async fn connect() -> OnlineClient<SubstrateConfig> {
@@ -21,7 +21,8 @@ pub async fn connect() -> OnlineClient<SubstrateConfig> {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api = connect().await;
 
-    let alice: MultiAddress<AccountId32, u32> = dev::alice().public_key().into();
+    // let alice: MultiAddress<AccountId32, u32> = dev::alice().public_key().into();
+    let alice: MultiAddress<AccountId32, ()> = dev::alice().public_key().into();
     let address: AccountId32 = dev::alice().public_key().into();
 
     // Initialise an empty call buffer
@@ -63,12 +64,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     std::thread::sleep(std::time::Duration::from_secs(2));
 
-    //let dest: AccountId32 = dev::bob().public_key().into();
-    let dest: MultiAddress<AccountId32, u32> = dev::bob().public_key().into();
+    // let dest: MultiAddress<AccountId32, u32> = dev::bob().public_key().into();
+    let dest: MultiAddress<AccountId32, ()> = dev::bob().public_key().into();
     // Sign and send transfer paying fees with ASSET created
-    if let Err(subxt::Error::Runtime(dispatch_err)) = sign_and_send_transfer(api.clone(),dest, 1000, ASSET_ID).await  {
-        eprintln!("Could not dispatch the call: {}", dispatch_err);
-    }
+    let a = sign_and_send_transfer(api.clone(),dest, 100, ASSET_ID).await;
+    println!("{:?}", a);
+  
 
     //query_assets(api.clone()).await?;
     Ok(())
