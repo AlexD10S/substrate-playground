@@ -72,7 +72,7 @@ pub fn mint_token_call(
 pub fn create_pool_with_native_call(asset_id: u32) -> Result<Call, Box<dyn std::error::Error>> {
     let call = Call::AssetConversion(AssetConversionCall::create_pool {
         asset1: MultiLocation { parents: 1, interior: Here }, //Native asset which has a MultiLocation represented like that
-        asset2: MultiLocation { parents: 0, interior: X2(PalletInstance(1), GeneralIndex(asset_id.into())) } , //The PalletInstance of 50 represents the Assets pallet on AssetHub and the GeneralIndex is the u32 AssetId of the asset.
+        asset2: MultiLocation { parents: 0, interior: X2(PalletInstance(50), GeneralIndex(asset_id.into())) } , //The PalletInstance of 50 represents the Assets pallet on AssetHub and the GeneralIndex is the u32 AssetId of the asset.
     });
 
     Ok(call)
@@ -89,7 +89,7 @@ pub fn provide_liquidity_to_token_native_pool_call(
 ) -> Result<Call, Box<dyn std::error::Error>> {
     let call = Call::AssetConversion(AssetConversionCall::add_liquidity {
         asset1: MultiLocation { parents: 1, interior: Here },
-        asset2: MultiLocation { parents: 0, interior: X2(PalletInstance(1), GeneralIndex(asset_id.into())) },
+        asset2: MultiLocation { parents: 0, interior: X2(PalletInstance(50), GeneralIndex(asset_id.into())) },
         amount1_desired: amount1_desired,
         amount2_desired: amount2_desired,
         amount1_min: amount1_min,

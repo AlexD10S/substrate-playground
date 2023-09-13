@@ -41,10 +41,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     call_buffer.push(mint_token_call(ASSET_ID, alice.clone(), AMOUNT_TO_MINT).unwrap());
 
     //Create Pool
-    call_buffer.push(create_pool_with_native_call(ASSET_ID).unwrap());
+   call_buffer.push(create_pool_with_native_call(ASSET_ID).unwrap());
     //Provide Liquidity to the pool
     let existential_deposit = query_existential_deposit(api.clone())?;
-    println!("ed {:?}", existential_deposit);
+
     call_buffer.push(
         provide_liquidity_to_token_native_pool_call(
             ASSET_ID,
@@ -67,8 +67,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let dest: MultiAddress<AccountId32, u32> = dev::bob().public_key().into();
     let dest: MultiAddress<AccountId32, ()> = dev::bob().public_key().into();
     // Sign and send transfer paying fees with ASSET created
-    let a = sign_and_send_transfer(api.clone(),dest, 100, ASSET_ID).await;
-    println!("{:?}", a);
+    let result = sign_and_send_transfer(api.clone(),dest, 100, ASSET_ID).await;
+    println!("{:?}", result);
   
 
     //query_assets(api.clone()).await?;
