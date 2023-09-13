@@ -34,14 +34,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //Set Token Metadata
     const NAME: &str = "Asset1";
     const SYMBOL: &str = "A1";
-    call_buffer.push(set_asset_metadata_call(ASSET_ID, NAME.as_bytes().to_vec(), SYMBOL.as_bytes().to_vec(), 0).unwrap());
+    call_buffer.push(
+        set_asset_metadata_call(
+            ASSET_ID,
+            NAME.as_bytes().to_vec(),
+            SYMBOL.as_bytes().to_vec(),
+            0,
+        )
+        .unwrap(),
+    );
 
     //Mint token
     const AMOUNT_TO_MINT: u128 = 200000;
     call_buffer.push(mint_token_call(ASSET_ID, alice.clone(), AMOUNT_TO_MINT).unwrap());
 
     //Create Pool
-   call_buffer.push(create_pool_with_native_call(ASSET_ID).unwrap());
+    call_buffer.push(create_pool_with_native_call(ASSET_ID).unwrap());
     //Provide Liquidity to the pool
     let existential_deposit = query_existential_deposit(api.clone())?;
 
@@ -58,7 +66,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     // Sign and send batch_call to the network
-    if let Err(subxt::Error::Runtime(dispatch_err)) = sign_and_send_batch_calls(api.clone(), call_buffer).await  {
+    if let Err(subxt::Error::Runtime(dispatch_err)) =
+        sign_and_send_batch_calls(api.clone(), call_buffer).await
+    {
         eprintln!("Could not dispatch the call: {}", dispatch_err);
     }
 
@@ -67,9 +77,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let dest: MultiAddress<AccountId32, u32> = dev::bob().public_key().into();
     let dest: MultiAddress<AccountId32, ()> = dev::bob().public_key().into();
     // Sign and send transfer paying fees with ASSET created
-    let result = sign_and_send_transfer(api.clone(),dest, 100, ASSET_ID).await;
+    let result = sign_and_send_transfer(api.clone(), dest, 100, ASSET_ID).await;
     println!("{:?}", result);
-  
 
     //query_assets(api.clone()).await?;
     Ok(())
