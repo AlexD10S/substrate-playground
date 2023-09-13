@@ -2766,6 +2766,7 @@ name = "subxt_playground"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "hex",
  "subxt",
  "subxt-signer",
  "tokio",

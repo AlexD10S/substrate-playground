@@ -12,7 +12,7 @@ cargo build
 ```
 
 ## Pay fees with no-native asset.
-Two examples of how to pay fees with a no-native asset, it depends on the configuration of the `pallet_asset_conversion`.
+Two examples of showcase how to pay fees with a no-native asset, it depends on the configuration of the `pallet_asset_conversion`.
 The first example uses the following configuration: https://github.com/paritytech/polkadot-sdk/blob/master/substrate/bin/node/runtime/src/lib.rs#L1622
 
 While the second example uses the following: https://github.com/paritytech/polkadot-sdk/blob/master/cumulus/parachains/runtimes/assets/asset-hub-westend/src/lib.rs#L304

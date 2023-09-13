@@ -125,6 +125,12 @@ pub async fn sign_and_send_transfer(
 
     let tx_params = Params::new().tip(AssetTip::new(0).of_asset(asset_id));
 
+    //TODO: Delete after works Commands to check the extrinsic
+    let extrinsic = api.tx().create_signed(&balance_transfer_tx, &alice_pair_signer, tx_params).await;
+    let encoded = extrinsic.unwrap().into_encoded();
+    let hex_encoded = hex::encode(encoded);
+    println!("Extrinsic encoded: {:?}", hex_encoded);
+    
     let hash = api
         .tx()
         .sign_and_submit_then_watch(&balance_transfer_tx, &alice_pair_signer, tx_params)
