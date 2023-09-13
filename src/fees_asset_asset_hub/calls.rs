@@ -3,17 +3,12 @@ use subxt::utils::{AccountId32, MultiAddress};
 use subxt::{OnlineClient, SubstrateConfig};
 use subxt_signer::sr25519::dev::{self};
 
-#[subxt::subxt(runtime_metadata_path = "src/metadata/local_metadata.scale")]
+#[subxt::subxt(runtime_metadata_path = "src/metadata/asset_hub_metadata.scale")]
 pub mod local {}
 
-// #[subxt::subxt(runtime_metadata_path = "src/metadata/westend_metadata.scale")]
-// pub mod westend {}
-
-// pub type Call = local::runtime_types::kitchensink_runtime::RuntimeCall;
 pub type Call = local::runtime_types::asset_hub_westend_runtime::RuntimeCall;
 type AssetsCall = local::runtime_types::pallet_assets::pallet::Call;
 type AssetConversionCall = local::runtime_types::pallet_asset_conversion::pallet::Call;
-// type NativeOrAssetId = local::runtime_types::pallet_asset_conversion::types::NativeOrAssetId<u32>;
 type MultiLocation = local::runtime_types::staging_xcm::v3::multilocation::MultiLocation;
 use local::runtime_types::staging_xcm::v3::junction::Junction::{GeneralIndex, PalletInstance};
 use local::runtime_types::staging_xcm::v3::junctions::Junctions::{Here, X2};
@@ -21,7 +16,6 @@ use local::runtime_types::staging_xcm::v3::junctions::Junctions::{Here, X2};
 // Create an asset call
 pub fn create_asset_call(
     asset_id: u32,
-    // admin: MultiAddress<AccountId32, u32>,
     admin: MultiAddress<AccountId32, ()>,
     min_balance: u128,
 ) -> Result<Call, Box<dyn std::error::Error>> {
@@ -54,7 +48,6 @@ pub fn set_asset_metadata_call(
 // Mint token
 pub fn mint_token_call(
     asset_id: u32,
-    // beneficiary: MultiAddress<AccountId32, u32>,
     beneficiary: MultiAddress<AccountId32, ()>,
     amount: u128,
 ) -> Result<Call, Box<dyn std::error::Error>> {
@@ -136,7 +129,6 @@ pub async fn sign_and_send_batch_calls(
 //
 pub async fn sign_and_send_transfer(
     api: OnlineClient<SubstrateConfig>,
-    // dest: MultiAddress<AccountId32, (u32)>,
     dest: MultiAddress<AccountId32, ()>,
     amount: u128,
     asset_id: u32,
