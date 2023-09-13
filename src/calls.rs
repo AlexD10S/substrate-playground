@@ -11,10 +11,13 @@ pub mod local {}
 
 // pub type Call = local::runtime_types::kitchensink_runtime::RuntimeCall;
 pub type Call = local::runtime_types::asset_hub_westend_runtime::RuntimeCall;
-type AssetsCall = local::runtime_types::pallet_asset_conversion::pallet::Call;
+type AssetsCall = local::runtime_types::pallet_assets::pallet::Call;
 type AssetConversionCall = local::runtime_types::pallet_asset_conversion::pallet::Call;
 // type NativeOrAssetId = local::runtime_types::pallet_asset_conversion::types::NativeOrAssetId<u32>;
-type MultiLocation = local::runtime_types::pallet_xcm::multilocation::MultiLocation;
+type MultiLocation = local::runtime_types::staging_xcm::v3::multilocation::MultiLocation;
+use local::runtime_types::staging_xcm::v3::junctions::Junctions::{Here, X2};
+use local::runtime_types::staging_xcm::v3::junction::Junction::{PalletInstance, GeneralIndex};
+
 
 // Create an asset call
 pub fn create_asset_call(
@@ -68,8 +71,8 @@ pub fn mint_token_call(
 // Create pool
 pub fn create_pool_with_native_call(asset_id: u32) -> Result<Call, Box<dyn std::error::Error>> {
     let call = Call::AssetConversion(AssetConversionCall::create_pool {
-        asset1: NativeOrAssetId::Native,
-        asset2: NativeOrAssetId::Asset(asset_id),
+        asset1: MultiLocation { parents: 1, interior: Here }, //Native asset which has a MultiLocation represented like that
+        asset2: MultiLocation { parents: 0, interior: X2(PalletInstance(1), GeneralIndex(asset_id.into())) } , //The PalletInstance of 50 represents the Assets pallet on AssetHub and the GeneralIndex is the u32 AssetId of the asset.
     });
 
     Ok(call)
@@ -85,8 +88,8 @@ pub fn provide_liquidity_to_token_native_pool_call(
     mint_to: AccountId32,
 ) -> Result<Call, Box<dyn std::error::Error>> {
     let call = Call::AssetConversion(AssetConversionCall::add_liquidity {
-        asset1: NativeOrAssetId::Native,
-        asset2: NativeOrAssetId::Asset(asset_id),
+        asset1: MultiLocation { parents: 1, interior: Here },
+        asset2: MultiLocation { parents: 0, interior: X2(PalletInstance(1), GeneralIndex(asset_id.into())) },
         amount1_desired: amount1_desired,
         amount2_desired: amount2_desired,
         amount1_min: amount1_min,
