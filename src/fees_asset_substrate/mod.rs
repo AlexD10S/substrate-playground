@@ -56,21 +56,23 @@ async fn prepare_setup(api: OnlineClient<SubstrateConfig>, asset_id: u32) {
         .unwrap(),
     );
 
-    //Mint token
-    const AMOUNT_TO_MINT: u128 = 200000;
+    //Mint token to Alice and Charlie
+    const AMOUNT_TO_MINT: u128 = 2000000000000000000;
     call_buffer.push(mint_token_call(asset_id, alice.clone(), AMOUNT_TO_MINT).unwrap());
+    let alice: MultiAddress<AccountId32, u32> = dev::alice().public_key().into();
+    // let charlie: MultiAddress<AccountId32, u32> = dev::alice().public_key().into();
 
     //Create Pool
     call_buffer.push(create_pool_with_native_call(asset_id).unwrap());
 
-    //Provide Liquidity to the pool
+    // Provide Liquidity to the pool
     call_buffer.push(
         provide_liquidity_to_token_native_pool_call(
             asset_id,
+            10000000000000000,
+            10000000000000000,
             100000000000000,
-            10000,
-            0,
-            0,
+            100000000000000,
             address,
         )
         .unwrap(),
