@@ -5,6 +5,7 @@ Collection of different Substrate examples/scripts I have build to showcase/test
 Examples:
 - 1. Pay fees with no-native asset in a Substrate based chain. [How to run it](#fees_asset_substrate)
 - 2. Pay fees with no-native asset in a AssetHub chain. [How to run it](#fees_asset_asset_hub)
+- 3. SCALE Encode a particular type in Rococo, useful for Rococo sudo tasks [How to run it](#encode_value_rococo)
 
 Build:
 ```shell
@@ -67,4 +68,21 @@ subxt metadata --url http://127.0.0.1:9944 -f bytes > src/metadata/asset_hub_met
 Run the script
 ```shell
 cargo run fees-asset-asset-hub
+```
+
+
+<a id="encode_value_rococo"></a>
+### Example of how to Scale Encode a type for Rococo.
+This is useful for me for Rococo sudo tasks, it can be useful for you for some other tasks or jsut for learning purposes. 
+It encodes a specific type, but you can change it for the type you want to encode.
+
+Generate the metadata
+```shell
+subxt metadata --url https://rococo-rpc.polkadot.io:443 -f bytes >  src/metadata/rococo_metadata.scale
+```
+Change the metadata if you want to use other networks
+
+Run the script
+```shell
+cargo run encode-value-rococo
 ```

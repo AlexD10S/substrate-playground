@@ -11,3 +11,4 @@ subxt = "0.31.0"
 subxt-signer = { version = "0.31.0", features = ["subxt", "sr25519"] }
 clap = { version = "4.4.3", features = ["derive"] }
 hex = "0.4"
+sp-core = "21.0.0"
