@@ -6,6 +6,7 @@ Examples:
 - 1. Pay fees with no-native asset in a Substrate based chain. [How to run it](#fees_asset_substrate)
 - 2. Pay fees with no-native asset in a AssetHub chain. [How to run it](#fees_asset_asset_hub)
 - 3. SCALE Encode a particular type in Rococo, useful for Rococo sudo tasks [How to run it](#encode_value_rococo)
+- 4. Calculate a Sovereign Account for a para_id [How to run it](#calculate_sovereign_account)
 
 Build:
 ```shell
@@ -85,4 +86,19 @@ Change the metadata if you want to use other networks
 Run the script
 ```shell
 cargo run encode-value-rococo
+```
+
+<a id="calculate_sovereign_account"></a>
+### Example of to calculate a Sovereign Account.
+As the one above, this is useful for me for Rococo sudo tasks, it can be useful for you for some other tasks or just for learning purposes. 
+
+Generate the metadata
+```shell
+subxt metadata --url http://127.0.0.1:9900 -f bytes > src/metadata/rococo_local_metadata.scale   
+```
+Change the metadata if you want to use other networks
+
+Run the script
+```shell
+cargo run calculate-sovereign-account 2000
 ```
